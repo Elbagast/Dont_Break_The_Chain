@@ -2,6 +2,7 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <memory>
 #include "quptr.h"
 #include "chain_widget.h"
 
@@ -26,8 +27,7 @@ namespace Chain
         explicit Main_Window(QWidget* parent = nullptr);
         ~Main_Window() override;
 
-        void add_chain(std::string const& title, std::string const& description, int year, int month, int day);
-        void add_chain(std::string const& title, std::string const& description, boost::gregorian::date const& start_date = boost::gregorian::day_clock::local_day());
+        void add_chain(QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
 
     private slots:
         void action_slot_New_Chain();

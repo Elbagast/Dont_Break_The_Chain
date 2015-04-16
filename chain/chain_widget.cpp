@@ -7,16 +7,15 @@
 #include <QLabel>
 #include <QtDebug>
 
-Chain::Chain_Widget::Chain_Widget(std::string const& title, std::string const& description, boost::gregorian::date const& start, QWidget* parent) :
-    QGroupBox(title.c_str(), parent),
-    m_data(title, description, start),
-    m_description_label(make_quptr<QLabel>(description.c_str())),
+Chain::Chain_Widget::Chain_Widget(QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent) :
+    QGroupBox(title, parent),
+    m_data(title, description, colour, start),
+    m_description_label(make_quptr<QLabel>(description)),
     m_layout(make_quptr<QVBoxLayout>()),
     m_model(make_quptr<Chain_Table_Model>(m_data)),
     m_tableview(make_quptr<Chain_Tableview>())
 {
     // build widgets for the chain
-    assert(m_data.day_count() >= 1);
     m_layout->addWidget(m_description_label.get());
 
     m_tableview->setModel(m_model.get());

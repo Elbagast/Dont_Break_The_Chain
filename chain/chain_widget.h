@@ -22,7 +22,7 @@ namespace Chain
     {
         Q_OBJECT
     public:
-        Chain_Widget(std::string const& title, std::string const& description, boost::gregorian::date const& start, QWidget* parent = nullptr);
+        Chain_Widget(QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent = nullptr);
         ~Chain_Widget() override;
 
     signals:

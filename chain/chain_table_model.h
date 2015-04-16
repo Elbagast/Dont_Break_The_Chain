@@ -8,6 +8,15 @@ namespace Chain
 {
     class Chain_Data;
 
+    /*
+    Chain_Table_Model
+    ====================================================================================================
+    Model class to represent Chain_Data in view classes.
+
+    Note:
+    In Chain_Data a weekday spans 1 - 7, in the model it spans 0 - 6
+    */
+
     class Chain_Table_Model :
             public QAbstractTableModel
     {
@@ -64,7 +73,6 @@ namespace Chain
 
         static QColor const s_color_blank;
         static QColor const s_color_nothing;
-        static QColor const s_color_did_stuff;
     };
 
 } // namespace Chain

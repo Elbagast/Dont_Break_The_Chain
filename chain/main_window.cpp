@@ -32,14 +32,9 @@ Chain::Main_Window::Main_Window(QWidget* parent) :
 
 Chain::Main_Window::~Main_Window() = default;
 
-void Chain::Main_Window::add_chain(std::string const& title, std::string const& description, int year, int month, int day)
+void Chain::Main_Window::add_chain(QString const& title, QString const& description, QColor colour, QDate start_date)
 {
-    add_chain(title, description, boost::gregorian::date(year, month, day));
-}
-
-void Chain::Main_Window::add_chain(std::string const& title, std::string const& description, boost::gregorian::date const& start_date)
-{
-    m_chain_widgets.push_back(make_quptr<Chain_Widget>(title, description, start_date, this));
+    m_chain_widgets.push_back(make_quptr<Chain_Widget>(title, description, colour, start_date, this));
     m_scrollarea_contents_layout->insertWidget(m_scrollarea_contents_layout->count() - 1, m_chain_widgets.back().get());
 }
 
@@ -47,10 +42,10 @@ void Chain::Main_Window::action_slot_New_Chain()
 {
     New_Chain_Dialog dialog{this};
 
-    if (dialog.exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted && dialog.has_valid_selections())
     {
-        QDate const& date = dialog.date();
-        add_chain(dialog.title().toStdString(), dialog.description().toStdString(), date.year(), date.month(), date.day());
+        QDate date = dialog.date();
+        add_chain(dialog.title(), dialog.description(), dialog.colour(), date);
     }
 }
 

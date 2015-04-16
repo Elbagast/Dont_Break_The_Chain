@@ -13,11 +13,18 @@ of this sort of thing...
 
 Todo:
 - Saving and loading chains
+    - Individual chain files?
+    - Save where?
+- Presentation and size
+    - Alternative visualisations?
+    - Longest/current streak?
+- Make New_Chain_Dialog determine acceptable inputs in a better way
+    - Prompt on text not entered etc.
+
+Done:
 - Selectable chain colours
-- Presentation and size (alternative visualisations?)
-- Make entirely Qt library based (?)
+- Make entirely Qt library based
 
 Compiling Notes
 ----------------
 - Qt 5.4 library
-- Boost 1.57 gregorian date library

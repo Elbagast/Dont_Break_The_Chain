@@ -6,7 +6,6 @@
 
 QColor const Chain::Chain_Table_Model::s_color_blank = QColor(200,200,200,255);
 QColor const Chain::Chain_Table_Model::s_color_nothing = QColor(255,255,255,255);
-QColor const Chain::Chain_Table_Model::s_color_did_stuff = QColor(50,100,50,255);
 
 // Special 6
 //============================================================
@@ -115,9 +114,9 @@ QColor Chain::Chain_Table_Model::get_colour(int column, int row) const
     if (within_chain(column, row))
     {
         // calculate the index from column and row
-        if (mr_chain_data.link(column, row).did_stuff())
+        if (mr_chain_data.link(column, row + 1))
         {
-            return s_color_did_stuff;
+            return mr_chain_data.colour();
         }
         else
         {
@@ -140,7 +139,7 @@ QString Chain::Chain_Table_Model::get_tooltip(int column, int row) const
 {
     if (within_chain(column, row))
     {
-        return QString::fromStdString(mr_chain_data.link(column, row).date_string());
+        return mr_chain_data.link_date(column, row + 1).toString();
     }
     else
     {
@@ -168,12 +167,12 @@ bool Chain::Chain_Table_Model::within_chain(int column, int row) const
         return false;
     }
     // if in days before the chain
-    else if (column == 0 && row < mr_chain_data.first_day_weekday())
+    else if (column == 0 && row + 1 < mr_chain_data.first_day_weekday())
     {
         return false;
     }
     // else if in days after the chain
-    else if (column == columnCount() - 1 && row > mr_chain_data.last_day_weekday())
+    else if (column == columnCount() - 1 && row + 1 > mr_chain_data.last_day_weekday())
     {
         return false;
     }
@@ -192,7 +191,8 @@ bool Chain::Chain_Table_Model::link_did_stuff(int column, int row) const
 {
     if (within_chain(column, row))
     {
-        return mr_chain_data.link(column, row).did_stuff();
+        // convert row to weekday in the data
+        return mr_chain_data.link(column, row + 1);
     }
     else
     {
@@ -205,7 +205,7 @@ void Chain::Chain_Table_Model::set_link_did_stuff(QModelIndex const& index, bool
 {
     if (within_chain(index))
     {
-        mr_chain_data.link(index.column(), index.row()).set_did_stuff(state);
+        mr_chain_data.set_link(index.column(), index.row() + 1, state);
         emit dataChanged(index, index, {Qt::BackgroundRole});
     }
 }

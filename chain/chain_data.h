@@ -1,35 +1,55 @@
 #ifndef CHAIN_DATA_H
 #define CHAIN_DATA_H
 
-#include <vector>
-#include "link_data.h"
+#include <QString>
+#include <QColor>
+#include <QDate> // QDate contains only an integer so pass by value
+#include <QList>
 
 namespace Chain
 {
+    /*
+    Chain_Data
+    ====================================================================================================
+    Data class that contains everything needed to represent a chain.
+    */
     class Chain_Data
     {
     public:
         // By default a chain starts today
-        Chain_Data(std::string const& title, std::string const& description, boost::gregorian::date const& start_date = boost::gregorian::day_clock::local_day());
-        ~Chain_Data();
+        Chain_Data(QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
 
-        std::string const& title() const;
-        std::string const& description() const;
-        boost::gregorian::date const& start_date() const;
-        boost::gregorian::date const& end_date() const;
+        QString const& title() const;
+        QString const& description() const;
 
-        std::vector<Link_Data>& links();
-        std::vector<Link_Data> const& links() const;
+        QColor colour() const;
 
-        void set_title(std::string const& value);
-        void set_description(std::string const& value);
+        QDate start_date() const;
+        QDate end_date() const;
+
+        QList<bool>& chain();
+        QList<bool> const& chain() const;
+
+        bool link(int index) const;
+        bool link(int week, int weekday) const;
+        //bool link(QDate date) const;
+
+        QDate link_date(int index) const;
+        QDate link_date(int week, int weekday) const;
+
+        void set_title(QString const& value);
+        void set_description(QString const& value);
+
+        void set_colour(QColor colour);
+        void set_colour(int red, int green, int blue);
+
+        void set_link(int index, bool state);
+        void set_link(int week, int weekday, bool state);
+        //void set_link(QDate date, bool state);
 
         // add links with dates between the last date stored and this day to the end of m_links
-        void append_links_until_today(boost::gregorian::date const& start);
+        void append_links_until_today(QDate start);
         void append_links_until_today();
-
-        Link_Data& link(int week, int weekday);
-        Link_Data const& link(int week, int weekday) const;
 
         int day_count() const;
         int week_count() const;
@@ -40,15 +60,14 @@ namespace Chain
         int first_day_weekday() const;
         int last_day_weekday() const;
 
-        static
-        int weekday(boost::gregorian::date const& date);
-
     private:
         int index_from(int week, int weekday) const;
 
-        std::string m_title;
-        std::string m_description;
-        std::vector<Link_Data> m_links;
+        QString m_title;
+        QString m_description;
+        QColor m_colour;
+        QDate m_start_date;
+        QList<bool> m_chain;
     };
 
 } // namespace Chain

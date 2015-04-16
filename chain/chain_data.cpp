@@ -1,86 +1,133 @@
 #include "chain_data.h"
+#include <cassert>
 
-
-Chain::Chain_Data::Chain_Data(std::string const& title, std::string const& description, boost::gregorian::date const& start_date):
+Chain::Chain_Data::Chain_Data(QString const& title, QString const& description, QColor colour, QDate start_date):
     m_title(title),
     m_description(description),
-    m_links()
+    m_colour(colour),
+    m_start_date(start_date),
+    m_chain()
 {
     append_links_until_today(start_date);
 }
 
-Chain::Chain_Data::~Chain_Data() = default;
-
-std::string const& Chain::Chain_Data::title() const
+QString const& Chain::Chain_Data::title() const
 {
     return m_title;
 }
 
-std::string const& Chain::Chain_Data::description() const
+QString const& Chain::Chain_Data::description() const
 {
     return m_description;
 }
 
-boost::gregorian::date const& Chain::Chain_Data::start_date() const
+QColor Chain::Chain_Data::colour() const
 {
-    assert(!m_links.empty());
-    return m_links.front().date();
+    return m_colour;
 }
 
-boost::gregorian::date const& Chain::Chain_Data::end_date() const
+QDate Chain::Chain_Data::start_date() const
 {
-    assert(!m_links.empty());
-    return m_links.back().date();
+    return m_start_date;
 }
 
-std::vector<Chain::Link_Data>& Chain::Chain_Data::links()
+QDate Chain::Chain_Data::end_date() const
 {
-    return m_links;
+    return m_start_date.addDays(m_chain.size() - 1);
 }
 
-std::vector<Chain::Link_Data> const& Chain::Chain_Data::links() const
+QList<bool>& Chain::Chain_Data::chain()
 {
-    return m_links;
+    return m_chain;
 }
 
-void Chain::Chain_Data::set_title(std::string const& value)
+QList<bool> const& Chain::Chain_Data::chain() const
+{
+    return m_chain;
+}
+
+bool Chain::Chain_Data::link(int index) const
+{
+    return m_chain.at(index);
+}
+
+bool Chain::Chain_Data::link(int week, int weekday) const
+{
+     return m_chain.at(index_from(week, weekday));
+}
+
+//bool Chain::Chain_Data::link(QDate date) const
+//{
+//
+//}
+
+QDate Chain::Chain_Data::link_date(int index) const
+{
+    return start_date().addDays(index);
+}
+
+QDate Chain::Chain_Data::link_date(int week, int weekday) const
+{
+    return start_date().addDays(index_from(week, weekday));
+}
+
+
+void Chain::Chain_Data::set_title(QString const& value)
 {
     m_title = value;
 }
 
-void Chain::Chain_Data::set_description(std::string const& value)
+void Chain::Chain_Data::set_description(QString const& value)
 {
     m_description = value;
 }
 
-void Chain::Chain_Data::append_links_until_today(boost::gregorian::date const& start)
+void Chain::Chain_Data::set_colour(QColor colour)
 {
-    boost::gregorian::date end{boost::gregorian::day_clock::local_day() + boost::gregorian::days(1)};
-    for (boost::gregorian::day_iterator iter{start}; *iter != end; ++iter)
+    m_colour = colour;
+}
+
+void Chain::Chain_Data::set_colour(int red, int green, int blue)
+{
+    m_colour = QColor(red, green, blue);
+}
+
+void Chain::Chain_Data::set_link(int index, bool state)
+{
+    m_chain[index] = state;
+}
+
+void Chain::Chain_Data::set_link(int week, int weekday, bool state)
+{
+    m_chain[index_from(week, weekday)] = state;
+}
+
+//void Chain::Chain_Data::set_link(QDate date, bool state)
+//{
+//
+//}
+
+void Chain::Chain_Data::append_links_until_today(QDate start)
+{
+    // end point is 1 passed today
+    QDate end_day = QDate::currentDate().addDays(1);
+    // start is a copy already
+    for (auto begin = start.toJulianDay(), end = end_day.toJulianDay(); begin != end; ++begin)
     {
-        m_links.emplace_back(*iter);
+        m_chain.push_back(false);
     }
 }
 
 void Chain::Chain_Data::append_links_until_today()
 {
-    boost::gregorian::date start{end_date() + boost::gregorian::days(1)};
+    // Start after the end of currently stored data
+    QDate start = end_date().addDays(1);
     append_links_until_today(start);
-}
-
-Chain::Link_Data& Chain::Chain_Data::link(int week, int weekday)
-{
-    return m_links.at(index_from(week, weekday));
-}
-
-Chain::Link_Data const& Chain::Chain_Data::link(int week, int weekday) const
-{
-    return m_links.at(index_from(week, weekday));
 }
 
 int Chain::Chain_Data::day_count() const
 {
-    return m_links.size();
+    return m_chain.size();
 }
 
 int Chain::Chain_Data::week_count() const
@@ -95,44 +142,26 @@ int Chain::Chain_Data::week_count() const
 
 int Chain::Chain_Data::weekdays_before_start() const
 {
-    return weekday(start_date());
+    // QDate week days are 1 = Mon ... 7 = Sun
+    return start_date().dayOfWeek() - 1;
 }
 
 int Chain::Chain_Data::weekdays_after_end() const
 {
-    return 6 - weekday(end_date());
+    return 7 - start_date().dayOfWeek();
 }
 
 int Chain::Chain_Data::first_day_weekday() const
 {
-    return weekday(start_date());
+    return start_date().dayOfWeek();
 }
 
 int Chain::Chain_Data::last_day_weekday() const
 {
-    return weekday(end_date());
-}
-
-int Chain::Chain_Data::weekday(boost::gregorian::date const& date)
-{
-    switch(date.day_of_week())
-    {
-    case boost::gregorian::Monday:      return 0;
-    case boost::gregorian::Tuesday:     return 1;
-    case boost::gregorian::Wednesday:   return 2;
-    case boost::gregorian::Thursday:    return 3;
-    case boost::gregorian::Friday:      return 4;
-    case boost::gregorian::Saturday:    return 5;
-    case boost::gregorian::Sunday:      return 6;
-    default:                            return 0;
-    }
+    return end_date().dayOfWeek();
 }
 
 int Chain::Chain_Data::index_from(int week, int weekday) const
 {
-    assert(week >= 0);
-    assert(week < week_count());
-    assert(weekday >= 0);
-    assert(weekday < 7);
-    return week * 7 + weekday - weekdays_before_start();
+    return week * 7 + (weekday -1) - weekdays_before_start();
 }

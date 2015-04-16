@@ -11,7 +11,13 @@ namespace Ui
 
 namespace Chain
 {
+    /*
+    New_Chain_Dialog
+    ====================================================================================================
+    Dialog to setup a new chain.
 
+    It takes a while to load the first time...?
+    */
     class New_Chain_Dialog :
             public QDialog
     {
@@ -21,10 +27,15 @@ namespace Chain
         explicit New_Chain_Dialog(QWidget *parent = 0);
         ~New_Chain_Dialog() override;
 
+        bool has_valid_selections() const;
+
         QString title() const;
         QString description() const;
         QColor colour() const;
         QDate date() const;
+
+    private slots:
+        void slot_pick_colour();
 
     private:
         std::unique_ptr<Ui::New_Chain_Dialog> m_ui;
