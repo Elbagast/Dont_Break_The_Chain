@@ -7,10 +7,20 @@
 #include <QLabel>
 #include <QtDebug>
 
-Chain::Chain_Widget::Chain_Widget(QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent) :
-    QGroupBox(title, parent),
-    m_data(title, description, colour, start),
-    m_description_label(make_quptr<QLabel>(description)),
+Chain::Chain_Widget::Chain_Widget(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent) :
+    Chain_Widget(Chain_Data(dir_path, title, description, colour, start), parent)
+{
+}
+
+Chain::Chain_Widget::Chain_Widget(QString const& dir_path, QString const& file_path, QWidget* parent) :
+    Chain_Widget(Chain_Data(dir_path, file_path), parent)
+{
+}
+
+Chain::Chain_Widget::Chain_Widget(Chain_Data && data, QWidget* parent) :
+    QGroupBox(data.title(), parent),
+    m_data(std::move(data)),
+    m_description_label(make_quptr<QLabel>(m_data.description())),
     m_layout(make_quptr<QVBoxLayout>()),
     m_model(make_quptr<Chain_Table_Model>(m_data)),
     m_tableview(make_quptr<Chain_Tableview>())
@@ -29,4 +39,9 @@ Chain::Chain_Widget::Chain_Widget(QString const& title, QString const& descripti
 }
 
 Chain::Chain_Widget::~Chain_Widget() = default;
+
+void Chain::Chain_Widget::save() const
+{
+    m_data.save();
+}
 

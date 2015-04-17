@@ -12,9 +12,7 @@ Will it work out? Well the Github squares seem to be working on me and that was 
 of this sort of thing...
 
 Todo:
-- Saving and loading chains
-    - Individual chain files?
-    - Save where?
+- Smarter chain management
 - Presentation and size
     - Alternative visualisations?
     - Longest/current streak?
@@ -24,6 +22,9 @@ Todo:
 Done:
 - Selectable chain colours
 - Make entirely Qt library based
+- Saving and loading chains
+    - Individual .chain files in text format
+    - In the directory the .exe is in
 
 Compiling Notes
 ----------------

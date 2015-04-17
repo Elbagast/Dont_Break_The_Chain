@@ -17,7 +17,11 @@ namespace Chain
     {
     public:
         // By default a chain starts today
-        Chain_Data(QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
+        Chain_Data(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
+        Chain_Data(QString const& dir_path, QString const& filepath);
+
+        void load();
+        void save() const;
 
         QString const& title() const;
         QString const& description() const;
@@ -60,14 +64,20 @@ namespace Chain
         int first_day_weekday() const;
         int last_day_weekday() const;
 
+        static
+        QString const& file_extension();
+
     private:
         int index_from(int week, int weekday) const;
 
+        QString m_filepath;
         QString m_title;
         QString m_description;
         QColor m_colour;
         QDate m_start_date;
         QList<bool> m_chain;
+
+        static QString const s_file_extension;
     };
 
 } // namespace Chain
