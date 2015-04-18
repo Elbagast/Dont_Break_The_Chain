@@ -12,8 +12,8 @@ Chain::Chain_Widget::Chain_Widget(QString const& dir_path, QString const& title,
 {
 }
 
-Chain::Chain_Widget::Chain_Widget(QString const& dir_path, QString const& file_path, QWidget* parent) :
-    Chain_Widget(Chain_Data(dir_path, file_path), parent)
+Chain::Chain_Widget::Chain_Widget(QString const& file_path, QWidget* parent) :
+    Chain_Widget(Chain_Data(file_path), parent)
 {
 }
 

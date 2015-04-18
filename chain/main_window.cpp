@@ -19,27 +19,32 @@ Chain::Main_Window::Main_Window(QString const& dir_path, QWidget* parent) :
     m_ui->setupUi(this);
     this->setWindowTitle("Don't Break the Chain");
 
+    // Configure the scroll widget contents
     m_ui->scrollArea->setWidget(m_scrollarea_contents_widget.get());
     m_scrollarea_contents_widget->setLayout(m_scrollarea_contents_layout.get());
     m_scrollarea_contents_layout->addStretch(1);
 
+    // Connect the menu actions
     QObject::connect(m_ui->action_New_Chain, &QAction::triggered,
                      this, &Main_Window::action_slot_New_Chain);
     QObject::connect(m_ui->action_Exit, &QAction::triggered,
                      this, &Main_Window::action_slot_Exit);
 
-    //add_chain("Test", "Stuff goes in here don't you know.", 2015,4,1);
-    //add_chain("Half Life 3", "Blah blah blah Mr Freeman.", 2015,4,13);
+    // Scan the directory for .chain files and load them
     QDir chain_dir{m_dir_path};
-    QStringList chain_files = chain_dir.entryList(QDir::Files);
-    for (QString const& file_path : chain_files)
-    {
-        if (file_path.endsWith(Chain_Data::file_extension()))
-        {
-            load_chain(file_path);
-        }
-    }
 
+    // Make a filter for files we care about: "*.chain" or whatever the extension is
+    QString name_filter{"*"};
+    name_filter.append(Chain_Data::file_extension());
+
+    // Get all the entries in the dir that are files with the .chain extension
+    QStringList file_names = chain_dir.entryList({name_filter}, QDir::Files);
+
+    // Load each chain file
+    for (QString const& file_name : file_names)
+    {
+        load_chain(chain_dir.filePath(file_name));
+    }
 }
 
 Chain::Main_Window::~Main_Window()
@@ -58,7 +63,7 @@ void Chain::Main_Window::add_chain(QString const& title, QString const& descript
 
 void Chain::Main_Window::load_chain(QString const& file_path)
 {
-    m_chain_widgets.push_back(make_quptr<Chain_Widget>(m_dir_path, file_path));
+    m_chain_widgets.push_back(make_quptr<Chain_Widget>(file_path));
     m_scrollarea_contents_layout->insertWidget(m_scrollarea_contents_layout->count() - 1, m_chain_widgets.back().get());
 }
 

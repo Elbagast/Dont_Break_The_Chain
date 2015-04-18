@@ -43,25 +43,28 @@
      <item row="2" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QSpinBox" name="colour_r_spinbox">
+        <widget class="QSpinBox" name="colour_red_spinbox">
          <property name="maximum">
           <number>255</number>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="colour_g_spinbox">
+        <widget class="QSpinBox" name="colour_green_spinbox">
          <property name="maximum">
           <number>255</number>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="colour_b_spinbox">
+        <widget class="QSpinBox" name="colour_blue_spinbox">
          <property name="maximum">
           <number>255</number>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="colour_display_widget" native="true"/>
        </item>
        <item>
         <widget class="QPushButton" name="colour_pick_button">

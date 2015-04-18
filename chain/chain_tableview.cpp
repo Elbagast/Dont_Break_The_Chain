@@ -1,6 +1,7 @@
 #include "chain_tableview.h"
 #include "chain_table_model.h"
 #include <QMenu>
+#include <QCursor>
 
 // Special 6
 //============================================================
@@ -37,6 +38,10 @@ void Chain::Chain_Tableview::slot_customContextMenuRequested(QPoint const& pos)
         QObject::connect(did_stuff_action, &QAction::toggled,
                          [true_model, &index] (bool state) { true_model->set_link_did_stuff(index, state); } );
 
-        context_menu.exec(this->mapToGlobal(pos));
+        // this one isn't putting the menu in the right place.
+        //context_menu.exec(this->mapToGlobal(pos));
+
+        // Execute the menu at the cursor position
+        context_menu.exec(QCursor::pos());
     }
 }

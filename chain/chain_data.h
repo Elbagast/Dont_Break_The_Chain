@@ -18,7 +18,7 @@ namespace Chain
     public:
         // By default a chain starts today
         Chain_Data(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
-        Chain_Data(QString const& dir_path, QString const& filepath);
+        explicit Chain_Data(QString const& filepath);
 
         void load();
         void save() const;
