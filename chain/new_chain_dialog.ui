@@ -102,6 +102,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>title_line_edit</tabstop>
+  <tabstop>desc_text_edit</tabstop>
+  <tabstop>colour_red_spinbox</tabstop>
+  <tabstop>colour_green_spinbox</tabstop>
+  <tabstop>colour_blue_spinbox</tabstop>
+  <tabstop>colour_pick_button</tabstop>
+  <tabstop>date_calender</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

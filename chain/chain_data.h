@@ -17,11 +17,16 @@ namespace Chain
     {
     public:
         // By default a chain starts today
-        Chain_Data(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start_date = QDate::currentDate());
-        explicit Chain_Data(QString const& filepath);
+        Chain_Data(QString const& title,
+                   QString const& description,
+                   QColor colour,
+                   QDate start_date);
 
-        void load();
-        void save() const;
+        Chain_Data(QString const& title,
+                   QString const& description,
+                   QColor colour,
+                   QDate start_date,
+                   QList<bool> const& data);
 
         QString const& title() const;
         QString const& description() const;
@@ -51,10 +56,6 @@ namespace Chain
         void set_link(int week, int weekday, bool state);
         //void set_link(QDate date, bool state);
 
-        // add links with dates between the last date stored and this day to the end of m_links
-        void append_links_until_today(QDate start);
-        void append_links_until_today();
-
         int day_count() const;
         int week_count() const;
 
@@ -64,20 +65,14 @@ namespace Chain
         int first_day_weekday() const;
         int last_day_weekday() const;
 
-        static
-        QString const& file_extension();
-
     private:
         int index_from(int week, int weekday) const;
 
-        QString m_filepath;
         QString m_title;
         QString m_description;
         QColor m_colour;
         QDate m_start_date;
         QList<bool> m_chain;
-
-        static QString const s_file_extension;
     };
 
 } // namespace Chain

@@ -23,7 +23,7 @@ Done:
 - Selectable chain colours
 - Make entirely Qt library based
 - Saving and loading chains
-    - Individual .chain files in text format
+    - Now in a single 'chains.xml' file
     - In the directory the .exe is in
 
 Compiling Notes

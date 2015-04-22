@@ -7,15 +7,16 @@
 #include <QLabel>
 #include <QtDebug>
 
-Chain::Chain_Widget::Chain_Widget(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent) :
-    Chain_Widget(Chain_Data(dir_path, title, description, colour, start), parent)
+Chain::Chain_Widget::Chain_Widget(QString const& title,
+                                  QString const& description,
+                                  QColor colour,
+                                  QDate start,
+                                  QList<bool> const& data,
+                                  QWidget* parent) :
+    Chain_Widget(Chain_Data(title, description, colour, start, data), parent)
 {
 }
 
-Chain::Chain_Widget::Chain_Widget(QString const& file_path, QWidget* parent) :
-    Chain_Widget(Chain_Data(file_path), parent)
-{
-}
 
 Chain::Chain_Widget::Chain_Widget(Chain_Data && data, QWidget* parent) :
     QGroupBox(data.title(), parent),
@@ -40,8 +41,7 @@ Chain::Chain_Widget::Chain_Widget(Chain_Data && data, QWidget* parent) :
 
 Chain::Chain_Widget::~Chain_Widget() = default;
 
-void Chain::Chain_Widget::save() const
+Chain::Chain_Data const& Chain::Chain_Widget::data() const
 {
-    m_data.save();
+    return m_data;
 }
-

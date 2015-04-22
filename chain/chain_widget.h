@@ -22,12 +22,16 @@ namespace Chain
     {
         Q_OBJECT
     public:
-        Chain_Widget(QString const& dir_path, QString const& title, QString const& description, QColor colour, QDate start, QWidget* parent = nullptr);
-        explicit Chain_Widget(QString const& file_path, QWidget* parent = nullptr);
+        Chain_Widget(QString const& title,
+                     QString const& description,
+                     QColor colour,
+                     QDate start,
+                     QList<bool> const& data,
+                     QWidget* parent = nullptr);
         explicit Chain_Widget(Chain_Data && data, QWidget* parent = nullptr);
         ~Chain_Widget() override;
 
-        void save() const;
+        Chain_Data const& data() const;
 
     signals:
 

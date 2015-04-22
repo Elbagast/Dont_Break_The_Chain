@@ -32,8 +32,8 @@ Chain::New_Chain_Dialog::~New_Chain_Dialog() = default;
 bool Chain::New_Chain_Dialog::has_valid_selections() const
 {
     return !title().isEmpty()
-            && !description().isEmpty()
-            && colour().isValid()
+            //&& !description().isEmpty()
+            //&& colour().isValid()
             && colour() != QColor(255,255,255) // don't want a white chain
             && !(date() > QDate::currentDate());
 }
