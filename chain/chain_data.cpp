@@ -1,6 +1,8 @@
 #include "chain_data.h"
 #include <cassert>
 
+// Special 6
+//============================================================
 Chain::Chain_Data::Chain_Data(QString const& title,
                               QString const& description,
                               QColor colour,
@@ -51,6 +53,8 @@ Chain::Chain_Data::Chain_Data(QString const& title,
     }
 }
 
+// Interface
+//============================================================
 QString const& Chain::Chain_Data::title() const
 {
     return m_title;
@@ -185,6 +189,9 @@ int Chain::Chain_Data::last_day_weekday() const
     return end_date().dayOfWeek();
 }
 
+// Helpers
+//============================================================
+// Convert a week number (in regard to the data) and weekday into an index in m_chain
 int Chain::Chain_Data::index_from(int week, int weekday) const
 {
     return week * 7 + (weekday -1) - weekdays_before_start();

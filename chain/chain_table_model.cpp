@@ -3,7 +3,8 @@
 #include <QBrush>
 #include <QDebug>
 
-
+// Static Data Members
+//============================================================
 QColor const Chain::Chain_Table_Model::s_color_blank = QColor(200,200,200,255);
 QColor const Chain::Chain_Table_Model::s_color_nothing = QColor(255,255,255,255);
 
@@ -26,7 +27,7 @@ Chain::Chain_Table_Model::~Chain_Table_Model() = default;
 Qt::ItemFlags Chain::Chain_Table_Model::flags(QModelIndex const& index) const
 {
     // if index is valid
-    if (index.isValid() && within_chain(index))
+    if (index.isValid() && is_within_chain(index))
     {
         return Qt::ItemIsEnabled;// | Qt::ItemIsSelectable; // editing will be indirect...
     }
@@ -111,7 +112,7 @@ QColor Chain::Chain_Table_Model::get_colour(QModelIndex const& index) const
 
 QColor Chain::Chain_Table_Model::get_colour(int column, int row) const
 {
-    if (within_chain(column, row))
+    if (is_within_chain(column, row))
     {
         // calculate the index from column and row
         if (mr_chain_data.link(column, row + 1))
@@ -137,7 +138,7 @@ QString Chain::Chain_Table_Model::get_tooltip(QModelIndex const& index) const
 
 QString Chain::Chain_Table_Model::get_tooltip(int column, int row) const
 {
-    if (within_chain(column, row))
+    if (is_within_chain(column, row))
     {
         return mr_chain_data.link_date(column, row + 1).toString();
     }
@@ -147,11 +148,11 @@ QString Chain::Chain_Table_Model::get_tooltip(int column, int row) const
     }
 }
 
-bool Chain::Chain_Table_Model::within_chain(QModelIndex const& index) const
+bool Chain::Chain_Table_Model::is_within_chain(QModelIndex const& index) const
 {
     if (index.isValid())
     {
-        return within_chain(index.column(), index.row());
+        return is_within_chain(index.column(), index.row());
     }
     else
     {
@@ -159,7 +160,7 @@ bool Chain::Chain_Table_Model::within_chain(QModelIndex const& index) const
     }
 }
 
-bool Chain::Chain_Table_Model::within_chain(int column, int row) const
+bool Chain::Chain_Table_Model::is_within_chain(int column, int row) const
 {
     // if the inputs are invalid
     if (column < 0 || row < 0)
@@ -189,7 +190,7 @@ bool Chain::Chain_Table_Model::link_did_stuff(QModelIndex const& index) const
 
 bool Chain::Chain_Table_Model::link_did_stuff(int column, int row) const
 {
-    if (within_chain(column, row))
+    if (is_within_chain(column, row))
     {
         // convert row to weekday in the data
         return mr_chain_data.link(column, row + 1);
@@ -203,7 +204,7 @@ bool Chain::Chain_Table_Model::link_did_stuff(int column, int row) const
 // TableView context menu should call this method to set the data
 void Chain::Chain_Table_Model::set_link_did_stuff(QModelIndex const& index, bool state)
 {
-    if (within_chain(index))
+    if (is_within_chain(index))
     {
         mr_chain_data.set_link(index.column(), index.row() + 1, state);
         emit dataChanged(index, index, {Qt::BackgroundRole});

@@ -5,6 +5,11 @@
 
 namespace Chain
 {
+    /*
+    Chain_Tableview
+    ====================================================================================================
+    Subclass of QTableView that configures itself on construction and has a custom context menu.
+    */
     class Chain_Tableview :
             public QTableView
     {
@@ -15,10 +20,17 @@ namespace Chain
         explicit Chain_Tableview(QWidget *parent = nullptr);
         ~Chain_Tableview() override;
 
+        // No copying
+        Chain_Tableview(Chain_Tableview const& other) = delete;
+        Chain_Tableview& operator=(Chain_Tableview const& other) = delete;
+
+        // Implicit default move
+        //Chain_Tableview(Chain_Tableview && other) = default;
+        //Chain_Tableview& operator=(Chain_Tableview && other) = default;
+
     public slots:
         // Slots
         //============================================================
-        // Connected to this->customContextMenuRequested
         void slot_customContextMenuRequested(QPoint const& pos);
     };
 

@@ -11,13 +11,20 @@ simple to use because it isn't aiming to be a tool for tracking workload - that'
 Will it work out? Well the Github squares seem to be working on me and that was basically a test run
 of this sort of thing...
 
-Todo:
+Possible additonal features:
 - Smarter chain management
+    - Editing existing chain details?
+    - Rearranging the list?
+    - Store chains as active and inactive?
 - Presentation and size
     - Alternative visualisations?
     - Longest/current streak?
-- Make New_Chain_Dialog determine acceptable inputs in a better way
-    - Prompt on text not entered etc.
+
+Todo:
+- Icon(s)
+- About
+- Licence(s)
+- Figure out which Qt dlls it needs
 
 Done:
 - Selectable chain colours
@@ -25,6 +32,9 @@ Done:
 - Saving and loading chains
     - Now in a single 'chains.xml' file
     - In the directory the .exe is in
+- Make New_Chain_Dialog determine acceptable inputs in a better way
+    - Displays seperate errors on an empty title and colours that are invalid
+        - OK button is disabled if there is an error
 
 Compiling Notes
 ----------------

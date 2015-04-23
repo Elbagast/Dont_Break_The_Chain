@@ -2,6 +2,8 @@
 #include "ui_new_chain_dialog.h"
 #include <QColorDialog>
 
+// Special 6
+//============================================================
 Chain::New_Chain_Dialog::New_Chain_Dialog(QWidget *parent) :
     QDialog(parent),
     m_ui(std::make_unique<Ui::New_Chain_Dialog>()),
@@ -24,11 +26,18 @@ Chain::New_Chain_Dialog::New_Chain_Dialog(QWidget *parent) :
                      [this](){ this->slot_set_colour_green_level(this->m_ui->colour_green_spinbox->value()); });
     QObject::connect(m_ui->colour_blue_spinbox, &QSpinBox::editingFinished,
                      [this](){ this->slot_set_colour_blue_level(this->m_ui->colour_blue_spinbox->value()); });
+
+    QObject::connect(m_ui->title_line_edit, &QLineEdit::textChanged,
+                     [this](){ this->update_title_error(); });
+
     update_colour_display();
+    update_title_error();
 }
 
 Chain::New_Chain_Dialog::~New_Chain_Dialog() = default;
 
+// Interface
+//============================================================
 bool Chain::New_Chain_Dialog::has_valid_selections() const
 {
     return !title().isEmpty()
@@ -95,6 +104,9 @@ void Chain::New_Chain_Dialog::slot_set_colour_blue_level(int blue)
     update_colour_display();
 }
 
+// Helpers
+//============================================================
+// Whenever the selected colour changes, update the widget that displays it
 void Chain::New_Chain_Dialog::update_colour_display()
 {
     m_ui->colour_display_widget;
@@ -103,4 +115,52 @@ void Chain::New_Chain_Dialog::update_colour_display()
     palette.setColor(m_ui->colour_display_widget->backgroundRole(), m_colour);
     m_ui->colour_display_widget->setPalette(palette);
     m_ui->colour_display_widget->setAutoFillBackground(true);
+
+    update_colour_error();
+}
+
+// Determine if the current colour is valid
+void Chain::New_Chain_Dialog::update_colour_error()
+{
+    bool ok_enabled{false};
+
+    // Check that the colour is valid
+    if (m_colour == QColor(255,255,255) || m_colour == QColor(200,200,200))
+    {
+        m_ui->colour_error_label->show();
+        ok_enabled = false;
+    }
+    else
+    {
+        m_ui->colour_error_label->hide();
+        ok_enabled = true;
+    }
+
+    update_ok_enabled(ok_enabled);
+}
+
+// Determine if the title is valid
+void Chain::New_Chain_Dialog::update_title_error()
+{
+    bool ok_enabled{false};
+
+    // Check that the title has been set
+    if (m_ui->title_line_edit->text().isEmpty())
+    {
+        m_ui->title_error_label->show();
+        ok_enabled = false;
+    }
+    else
+    {
+        m_ui->title_error_label->hide();
+        ok_enabled = true;
+    }
+
+    update_ok_enabled(ok_enabled);
+}
+
+// Set whether the OK button is enabled
+void Chain::New_Chain_Dialog::update_ok_enabled(bool state)
+{
+    m_ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(state);
 }

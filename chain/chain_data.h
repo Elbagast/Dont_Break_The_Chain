@@ -16,11 +16,12 @@ namespace Chain
     class Chain_Data
     {
     public:
-        // By default a chain starts today
+        // Special 6
+        //============================================================
         Chain_Data(QString const& title,
                    QString const& description,
                    QColor colour,
-                   QDate start_date);
+                   QDate start_date = QDate::currentDate());
 
         Chain_Data(QString const& title,
                    QString const& description,
@@ -28,6 +29,19 @@ namespace Chain
                    QDate start_date,
                    QList<bool> const& data);
 
+        // Implicit default destructor
+        //~Chain_Data() = default;
+
+        // Implicit default copy
+        //Chain_Data(Chain_Data const& other) = default;
+        //Chain_Data& operator=(Chain_Data const& other) = default;
+
+        // Implicit default move
+        //Chain_Data(Chain_Data && other) = default;
+        //Chain_Data& operator=(Chain_Data && other) = default;
+
+        // Interface
+        //============================================================
         QString const& title() const;
         QString const& description() const;
 
@@ -66,8 +80,13 @@ namespace Chain
         int last_day_weekday() const;
 
     private:
+        // Helpers
+        //============================================================
+        // Convert a week number (in regard to the data) and weekday into an index in m_chain
         int index_from(int week, int weekday) const;
 
+        // Data Members
+        //============================================================
         QString m_title;
         QString m_description;
         QColor m_colour;

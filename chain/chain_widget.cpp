@@ -7,16 +7,26 @@
 #include <QLabel>
 #include <QtDebug>
 
+// Special 6
+//============================================================
 Chain::Chain_Widget::Chain_Widget(QString const& title,
                                   QString const& description,
                                   QColor colour,
-                                  QDate start,
-                                  QList<bool> const& data,
+                                  QDate start_date,
                                   QWidget* parent) :
-    Chain_Widget(Chain_Data(title, description, colour, start, data), parent)
+    Chain_Widget(Chain_Data(title, description, colour, start_date), parent)
 {
 }
 
+Chain::Chain_Widget::Chain_Widget(QString const& title,
+                                  QString const& description,
+                                  QColor colour,
+                                  QDate start_date,
+                                  QList<bool> const& data,
+                                  QWidget* parent) :
+    Chain_Widget(Chain_Data(title, description, colour, start_date, data), parent)
+{
+}
 
 Chain::Chain_Widget::Chain_Widget(Chain_Data && data, QWidget* parent) :
     QGroupBox(data.title(), parent),

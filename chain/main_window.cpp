@@ -13,6 +13,8 @@
 #include <QXmlStreamReader>
 #include <QDebug>
 
+// Special 6
+//============================================================
 Chain::Main_Window::Main_Window(QString const& filepath, QWidget* parent) :
     QMainWindow(parent),
     m_ui(std::make_unique<Ui::Main_Window>()),
@@ -45,6 +47,9 @@ Chain::Main_Window::~Main_Window()
     save_all();
 }
 
+// Interface
+//============================================================
+// Create a new chain based on these inputs
 void Chain::Main_Window::add_chain(QString const& title,
                                    QString const& description,
                                    QColor colour,
@@ -55,7 +60,26 @@ void Chain::Main_Window::add_chain(QString const& title,
     m_scrollarea_contents_layout->insertWidget(m_scrollarea_contents_layout->count() - 1, m_chain_widgets.back().get());
 }
 
+// Action slots
+//============================================================
+void Chain::Main_Window::action_slot_New_Chain()
+{
+    New_Chain_Dialog dialog{this};
 
+    if (dialog.exec() == QDialog::Accepted && dialog.has_valid_selections())
+    {
+        QDate date = dialog.date();
+        add_chain(dialog.title(), dialog.description(), dialog.colour(), date);
+    }
+}
+
+void Chain::Main_Window::action_slot_Exit()
+{
+    this->close();
+}
+
+// Helpers
+//============================================================
 void Chain::Main_Window::save_all() const
 {
     //qDebug() << "Save: " << m_filepath;
@@ -202,22 +226,4 @@ void Chain::Main_Window::load_all()
 
         file.close();
     }
-}
-
-
-void Chain::Main_Window::action_slot_New_Chain()
-{
-    New_Chain_Dialog dialog{this};
-
-    if (dialog.exec() == QDialog::Accepted && dialog.has_valid_selections())
-    {
-        QDate date = dialog.date();
-        add_chain(dialog.title(), dialog.description(), dialog.colour(), date);
-    }
-}
-
-
-void Chain::Main_Window::action_slot_Exit()
-{
-    this->close();
 }

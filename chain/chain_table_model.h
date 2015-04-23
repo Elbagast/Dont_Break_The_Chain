@@ -11,7 +11,8 @@ namespace Chain
     /*
     Chain_Table_Model
     ====================================================================================================
-    Model class to represent Chain_Data in view classes.
+    Model class to represent Chain_Data in view classes. Intended for use with Chain_Tableview as that
+    uses this interface in its custom context menu.
 
     Note:
     In Chain_Data a weekday spans 1 - 7, in the model it spans 0 - 6
@@ -27,9 +28,11 @@ namespace Chain
         explicit Chain_Table_Model(Chain_Data& chain_data, QObject* parent = nullptr);
         ~Chain_Table_Model() override;
 
+        // No copying
         Chain_Table_Model(Chain_Table_Model const& other) = delete;
         Chain_Table_Model& operator=(Chain_Table_Model const& other) = delete;
 
+        // Implicit default move
         //Chain_Table_Model(Chain_Table_Model && other) = default;
         //Chain_Table_Model& operator=(Chain_Table_Model && other) = default;
 
@@ -54,14 +57,16 @@ namespace Chain
         bool setData (QModelIndex const& index, QVariant const& value, int role = Qt::EditRole ) override;
         bool setHeaderData ( int section, Qt::Orientation orientation, QVariant const& value, int role = Qt::EditRole ) override;
 
+        // Custom Interface
+        //============================================================
         QColor get_colour(QModelIndex const& index) const;
         QColor get_colour(int column, int row) const;
 
         QString get_tooltip(QModelIndex const& index) const;
         QString get_tooltip(int column, int row) const;
 
-        bool within_chain(QModelIndex const& index) const;
-        bool within_chain(int column, int row) const;
+        bool is_within_chain(QModelIndex const& index) const;
+        bool is_within_chain(int column, int row) const;
 
         bool link_did_stuff(QModelIndex const& index) const;
         bool link_did_stuff(int column, int row) const;
@@ -69,8 +74,12 @@ namespace Chain
         void set_link_did_stuff(QModelIndex const& index, bool state);
 
     private:
+        // Data Members
+        //============================================================
         Chain_Data& mr_chain_data;
 
+        // Static Data Members
+        //============================================================
         static QColor const s_color_blank;
         static QColor const s_color_nothing;
     };
